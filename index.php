@@ -52,7 +52,7 @@ ini_set('display_errors', 'On');
                 $subsec = $hymn["subsection"];
                 echo ("</table><h3>$sec: $subsec</h3><table>");
             }
-            echo ("<tr><td>{$hymn["num"]}</td><td><a href=\"{$hymn["num"]}\">{$hymn["title"]}</a></td>\n");
+            echo ("<tr><td>{$hymn["num"]}</td><td><a href=\"hymn.php?num={$hymn["num"]}\">{$hymn["title"]}</a></td>\n");
         }
         ?>
     </table>
