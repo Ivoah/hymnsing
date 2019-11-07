@@ -1,0 +1,21 @@
+body {
+    text-align: center;
+}
+
+table, th, td {
+    border: 1px solid black;
+    font-weight: bold;
+}
+
+table {
+    margin: auto;
+}
+
+th, td {
+    padding: 15px;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
