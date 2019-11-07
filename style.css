@@ -19,3 +19,27 @@ img {
     width: 100%;
     height: auto;
 }
+
+.navBarWrapper {
+    /* position: fixed; */
+    z-index: 1;
+    width: 100%;
+}
+
+.bar {
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bar li {
+    display: inline-block;
+}
+
+.bar a {
+    font-family: 'Raleway', sans-serif;
+    font-size: 20px;
+    color: #181818;
+    text-decoration: none;
+}
