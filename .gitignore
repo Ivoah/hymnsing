@@ -1,3 +1,5 @@
 auth.py
 __pycache__/
 audio/
+audio
+.vscode/
