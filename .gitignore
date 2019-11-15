@@ -1,1 +1,3 @@
-auth.php
+auth.py
+__pycache__/
+audio/
