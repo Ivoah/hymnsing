@@ -60,7 +60,7 @@ def hymn(hymn):
 def addLikes(hymn):
     db = pymysql.connect(**auth.auth)
     with db.cursor() as cursor:
-        cursor.execute('UPDATE hymns SET likes = likes + 1 WHERE title like \'%%|%s|%%\' ORDER BY likes DESC', title')
+        cursor.execute('UPDATE hymns SET likes = likes + 1 WHERE title like \'%%|%s|%%\' ORDER BY likes DESC', title)
         history = cursor.fetchall()
     db.close()
     return template('templates/hymn.tpl', hymn=hymn, hymns=hymns, history=history)
