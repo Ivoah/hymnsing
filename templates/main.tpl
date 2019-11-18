@@ -1,6 +1,4 @@
 %rebase('templates/base.tpl')
-<a href="/history">History</a>
-<hr>
 <table>
     <%sec = ''
     subsec = ''
