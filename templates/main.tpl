@@ -18,7 +18,7 @@
                 <table class="table table-borderless table-hover w-auto my-5">
                     <thead class="red lighten-1 white-text"><tr><th colspan="2" align="center">{{sec}}: {{subsec}}</th></tr></thead>
             %end
-            <tr class="clickable-row" onclick="window.location.href = '{{hymn['#']}}';">
+            <tr class="hymns clickable-row" onclick="window.location.href = '{{hymn['#']}}';">
                 <td>{{hymn['#']}}</td>
                 <td>{{hymn['title']}}</td>
             </tr>

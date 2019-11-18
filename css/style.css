@@ -32,7 +32,7 @@ img {
     box-shadow: 0 6px 16px 1px #ccc;
 }
 
-#hymns tr :not(th) {
+.hymns td {
     cursor: pointer;
 }
 
