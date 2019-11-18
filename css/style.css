@@ -27,11 +27,15 @@ img {
     height: auto;
 }
 
-.active-pink-4 input[type=Search]:focus:not([readonly]) {
-    border: 1px solid #ffcdd2;
-    box-shadow: 0 3px 6px 1px #ffcdd2;
+.active-black input[type=Search]:focus:not([readonly]) {
+    border: 0px;
+    box-shadow: 0 6px 16px 1px #ccc;
 }
 
-#hymns tr {
+#hymns tr :not(th) {
     cursor: pointer;
+}
+
+.form-control {
+    color: #dadada;
 }
