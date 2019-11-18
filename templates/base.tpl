@@ -17,7 +17,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light red lighten-4">
+    <nav class="navbar navbar-expand-lg navbar-dark elegant-color-dark">
         <a class="navbar-brand" href="/">Trinity Hymnal</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
