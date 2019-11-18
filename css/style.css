@@ -2,20 +2,36 @@ body {
     text-align: center;
 }
 
-table, th, td {
+/* table,
+th,
+td {
     border: 1px solid black;
     font-weight: bold;
+} */
+
+table {
+    box-shadow: 0 5px 18px #ffdade; /* red lighten-5 */
 }
 
 table {
     margin: auto;
 }
 
-th, td {
+th,
+td {
     padding: 15px;
 }
 
 img {
     width: 100%;
     height: auto;
+}
+
+.active-pink-4 input[type=Search]:focus:not([readonly]) {
+    border: 1px solid #ffcdd2;
+    box-shadow: 0 3px 6px 1px #ffcdd2;
+}
+
+#hymns tr {
+    cursor: pointer;
 }
