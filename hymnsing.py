@@ -30,7 +30,7 @@ def get_login():
 
     db = pymysql.connect(autocommit=True, **auth.auth)
     with db.cursor() as cursor:
-        cursor.execute('REPLACE INTO last_visit VALUES (%s, now())', uuid)
+        cursor.execute('INSERT INTO visitors (uuid, last_visit) VALUES (%s, now()) ON DUPLICATE KEY UPDATE last_visit=now()', uuid)
     db.close()
 
     return uuid
