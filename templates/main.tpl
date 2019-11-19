@@ -21,8 +21,8 @@
                     <thead class="hymns-section-head red lighten-1 white-text"><tr><th colspan="2" align="center">{{sec}}: {{subsec}}</th></tr></thead>
                     <tbody>
             %end
-            <tr class="hymns clickable-row" onclick="window.location.href = '{{hymn['#']}}';">
-                <td>{{hymn['#']}}</td>
+            <tr class="hymns clickable-row" onclick="window.location.href = '{{hymn['num']}}';">
+                <td>{{hymn['num']}}</td>
                 <td>{{hymn['title']}}</td>
             </tr>
         %end

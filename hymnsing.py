@@ -6,35 +6,50 @@ import collections
 
 import matplotlib.pyplot as plt
 
-from bottle import get, default_app, template, static_file, response
+from uuid import uuid4
+from bottle import get, default_app, template, static_file, response, request
 
 import auth
 
-with open('hymns.csv') as hymns_file:
-    hymns = list(csv.DictReader(hymns_file))
+def get_login():
+    uuid = request.get_cookie("uuid")
+    if not uuid:
+        uuid = uuid4()
+        response.set_cookie("uuid", str(uuid), max_age=60*60*24*365.25*10) # Set cookie to expire in 10 years
+    return uuid
 
 @get('/')
 def root():
-    return template('templates/main.tpl', hymns=hymns)
+    uuid = get_login()
+    db = pymysql.connect(**auth.auth)
+    with db.cursor(pymysql.cursors.DictCursor) as cursor:
+        cursor.execute('SELECT * FROM hymns LEFT JOIN (SELECT num, COUNT(*) likes FROM likes GROUP BY num) likes USING(num) ORDER BY num ASC')
+        hymns = cursor.fetchall()
+    return template('templates/main.tpl', hymns=hymns, uuid=uuid)
 
 @get('/history')
 def history():
+    uuid = get_login()
     db = pymysql.connect(**auth.auth)
-    with db.cursor() as cursor:
+    with db.cursor(pymysql.cursors.DictCursor) as cursor:
         cursor.execute('SELECT * FROM history ORDER BY date DESC')
         history = cursor.fetchall()
+        cursor.execute('SELECT * FROM hymns LEFT JOIN (SELECT num, COUNT(*) likes FROM likes GROUP BY num) likes USING(num) ORDER BY num ASC')
+        hymns = cursor.fetchall()
     db.close()
     return template('templates/history.tpl', hymns=hymns, history=history)
 
 @get('/history.png')
 def history_png():
     db = pymysql.connect(**auth.auth)
-    with db.cursor() as cursor:
+    with db.cursor(pymysql.cursors.DictCursor) as cursor:
         cursor.execute('SELECT hymns FROM history')
         rows = cursor.fetchall()
+        cursor.execute('SELECT * FROM hymns LEFT JOIN (SELECT num, COUNT(*) likes FROM likes GROUP BY num) likes USING(num) ORDER BY num ASC')
+        hymns = cursor.fetchall()
     db.close()
 
-    counter = collections.Counter(hymn for hymns in rows for hymn in hymns[0].strip('|').split('|'))
+    counter = collections.Counter(hymn for hymns in rows for hymn in hymns['hymns'].strip('|').split('|'))
     xs, ys = zip(*counter.most_common())
     names = [hymns[int(num) - 1]['title'] for num in xs]
 
@@ -49,22 +64,15 @@ def history_png():
 
 @get('/<hymn:int>')
 def hymn(hymn):
+    uuid = get_login()
     db = pymysql.connect(**auth.auth)
-    with db.cursor() as cursor:
+    with db.cursor(pymysql.cursors.DictCursor) as cursor:
         cursor.execute('SELECT date FROM history WHERE hymns LIKE \'%%|%s|%%\' ORDER BY date DESC', hymn)
         history = cursor.fetchall()
+        cursor.execute('SELECT * FROM hymns LEFT JOIN (SELECT num, COUNT(*) likes FROM likes GROUP BY num) likes USING(num) ORDER BY num ASC')
+        hymns = cursor.fetchall()
     db.close()
     return template('templates/hymn.tpl', hymn=hymn, hymns=hymns, history=history)
-
-@get('/<likes:int>')
-def addLikes(hymn):
-    db = pymysql.connect(**auth.auth)
-    with db.cursor() as cursor:
-        cursor.execute('UPDATE hymns SET likes = likes + 1 WHERE title like \'%%|%s|%%\' ORDER BY likes DESC', title)
-        history = cursor.fetchall()
-    db.close()
-    return template('templates/hymn.tpl', hymn=hymn, hymns=hymns, history=history)
-
 
 application = default_app()
 
