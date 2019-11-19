@@ -37,8 +37,8 @@ def root():
         cursor.execute('SELECT * FROM hymns LEFT JOIN (SELECT num, COUNT(*) likes FROM likes GROUP BY num) likes USING(num) ORDER BY num ASC')
         hymns = cursor.fetchall()
         cursor.execute('SELECT num FROM likes WHERE uuid=%s', uuid)
-        likes = cursor.fetchall()
-    return template('templates/main.tpl', sections=group(hymns, 'section', 'subsection'), likes=[like['num'] for like in likes])
+        likes = [like['num'] for like in cursor.fetchall()]
+    return template('templates/main.tpl', sections=group(hymns, 'section', 'subsection'), likes=likes)
 
 @get('/history')
 def history():
@@ -47,8 +47,10 @@ def history():
     with db.cursor(pymysql.cursors.DictCursor) as cursor:
         cursor.execute('SELECT date, num, title, likes FROM history NATURAL JOIN hymns LEFT JOIN (SELECT num, COUNT(*) likes FROM likes GROUP BY num) likes USING(num) ORDER BY date DESC, idx ASC')
         history = cursor.fetchall()
+        cursor.execute('SELECT num FROM likes WHERE uuid=%s', uuid)
+        likes = [like['num'] for like in cursor.fetchall()]
     db.close()
-    return template('templates/history.tpl', history=group(history, 'date'))
+    return template('templates/history.tpl', history=group(history, 'date'), likes=likes)
 
 @get('/history.png')
 def history_png():
