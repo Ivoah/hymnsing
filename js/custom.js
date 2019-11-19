@@ -16,19 +16,27 @@ $(document).ready(function () {
     var likes = parseInt(label.text().split());
     var num = heart.attr("num");
 
+    function addLikes(update) {
+      likes += update;
+      heart.toggleClass("liked");
+      label.text(likes + " like" + (likes != 1 ? "s" : ""));
+    }
+
+    function fail() {
+      $("#alert").html(`
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>Error</strong> couldn't update like.
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      `);
+    }
+
     if (!(heart.hasClass("liked"))) {
-      $.post("/like/" + num, function() {
-        heart.toggleClass("is_animating");
-        likes++;
-        heart.toggleClass("liked");
-        label.text(likes + " like" + (likes != 1 ? "s" : ""));
-      });
+      $.post("/like/" + num, () => {heart.toggleClass("is_animating"); addLikes(1)}).fail(fail);
     } else {
-      $.post("/unlike/" + num, function() {
-        likes--;
-        heart.toggleClass("liked");
-        label.text(likes + " like" + (likes != 1 ? "s" : ""));
-      });
+      $.post("/unlike/" + num, () => addLikes(-1)).fail(fail);
     }
   });
 

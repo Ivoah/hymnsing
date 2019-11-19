@@ -34,6 +34,9 @@
             </ul>
         </div>
     </nav>
+
+    <div id="alert"></div>
+
     {{!base}}
 
    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
