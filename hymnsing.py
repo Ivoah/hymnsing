@@ -27,6 +27,12 @@ def get_login():
     if not uuid:
         uuid = str(uuid4())
     response.set_cookie("uuid", uuid, path='/', max_age=60*60*24*365.25*10) # Set cookie to expire in ~10 years
+
+    db = pymysql.connect(autocommit=True, **auth.auth)
+    with db.cursor() as cursor:
+        cursor.execute('REPLACE INTO last_visit VALUES (%s, now())', uuid)
+    db.close()
+
     return uuid
 
 @get('/')
