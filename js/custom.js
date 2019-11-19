@@ -17,16 +17,19 @@ $(document).ready(function () {
     var num = heart.attr("num");
 
     if (!(heart.hasClass("liked"))) {
-      heart.toggleClass("is_animating");
-      $.post("/like/" + num);
-      likes++;
+      $.post("/like/" + num, function() {
+        heart.toggleClass("is_animating");
+        likes++;
+        heart.toggleClass("liked");
+        label.text(likes + " like" + (likes != 1 ? "s" : ""));
+      });
     } else {
-      $.post("/unlike/" + num);
-      likes--;
+      $.post("/unlike/" + num, function() {
+        likes--;
+        heart.toggleClass("liked");
+        label.text(likes + " like" + (likes != 1 ? "s" : ""));
+      });
     }
-
-    heart.toggleClass("liked");
-    label.text(likes + " like" + (likes != 1 ? "s" : ""));
   });
 
   $(".heart").on("animationend", function(){
