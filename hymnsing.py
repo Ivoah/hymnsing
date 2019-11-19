@@ -6,7 +6,7 @@ import collections
 import matplotlib.pyplot as plt
 
 from uuid import uuid4
-from bottle import get, default_app, template, static_file, response, request
+from bottle import *
 
 import auth
 
@@ -25,8 +25,8 @@ def group(l, *ks):
 def get_login():
     uuid = request.get_cookie("uuid")
     if not uuid:
-        uuid = uuid4()
-    response.set_cookie("uuid", str(uuid), max_age=60*60*24*365.25*10) # Set cookie to expire in 10 years
+        uuid = str(uuid4())
+    response.set_cookie("uuid", uuid, path='/', max_age=60*60*24*365.25*10) # Set cookie to expire in ~10 years
     return uuid
 
 @get('/')
@@ -36,7 +36,9 @@ def root():
     with db.cursor(pymysql.cursors.DictCursor) as cursor:
         cursor.execute('SELECT * FROM hymns LEFT JOIN (SELECT num, COUNT(*) likes FROM likes GROUP BY num) likes USING(num) ORDER BY num ASC')
         hymns = cursor.fetchall()
-    return template('templates/main.tpl', sections=group(hymns, 'section', 'subsection'))
+        cursor.execute('SELECT num FROM likes WHERE uuid=%s', uuid)
+        likes = cursor.fetchall()
+    return template('templates/main.tpl', sections=group(hymns, 'section', 'subsection'), likes=[like['num'] for like in likes])
 
 @get('/history')
 def history():
@@ -78,6 +80,22 @@ def hymn(num):
         hymn = cursor.fetchone()
     db.close()
     return template('templates/hymn.tpl', hymn=hymn, history=history)
+
+@post('/like/<num:int>')
+def like(num):
+    uuid = get_login()
+    db = pymysql.connect(autocommit=True, **auth.auth)
+    with db.cursor() as cursor:
+        cursor.execute('INSERT IGNORE INTO likes VALUES (%s, %s)', (uuid, num))
+    db.close()
+
+@post('/unlike/<num:int>')
+def unlike(num):
+    uuid = get_login()
+    db = pymysql.connect(autocommit=True, **auth.auth)
+    with db.cursor() as cursor:
+        cursor.execute('DELETE FROM likes WHERE uuid=%s AND num=%s', (uuid, num))
+    db.close()
 
 application = default_app()
 

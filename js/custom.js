@@ -11,11 +11,24 @@ $(document).ready(function () {
   });
 
   $(".heart").on("click", function() {
-    if (!($(this).hasClass("liked"))) {
-      $(this).toggleClass("is_animating");
+    var heart = $(this);
+    var label = heart.next();
+    var likes = parseInt(label.text().split());
+    var num = heart.attr("num");
+
+    if (!(heart.hasClass("liked"))) {
+      heart.toggleClass("is_animating");
+      $.post("/like/" + num);
+      likes++;
+    } else {
+      $.post("/unlike/" + num);
+      likes--;
     }
-    $(this).toggleClass("liked");
+
+    heart.toggleClass("liked");
+    label.text(likes + " like" + (likes != 1 ? "s" : ""));
   });
+
   $(".heart").on("animationend", function(){
     $(this).toggleClass("is_animating");
   });
