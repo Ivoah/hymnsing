@@ -6,25 +6,17 @@
 </div>
 
 <div id="hymn-tables">
-    <table>
-    <tbody>
-        <%sec = ''
-        subsec = ''
-        for hymn in hymns:
-            if hymn['section'] != sec or hymn['subsection'] != subsec:
-                sec = hymn['section']
-                subsec = hymn['subsection']%>
-                </tbody>
-                </table>
-    
-                <table class="table table-borderless table-hover w-25 my-5">
-                    <thead class="hymns-section-head red lighten-1 white-text"><tr><th colspan="2" align="center">{{sec}}: {{subsec}}</th></tr></thead>
-                    <tbody>
-            %end
-            <tr class="hymns clickable-row" onclick="window.location.href = '{{hymn['num']}}';">
-                <td>{{hymn['num']}}</td>
-                <td>{{hymn['title']}}</td>
-            </tr>
-        %end
-    </table>
+    %for section in sections:
+        <table class="table table-borderless table-hover w-25 my-5">
+            <thead class="hymns-section-head red lighten-1 white-text"><tr><th colspan="2" align="center">{{section[0]['section']}}: {{section[0]['subsection']}}</th></tr></thead>
+            <tbody>
+                %for hymn in section[1]:
+                    <tr class="hymns clickable-row" onclick="window.location.href='{{hymn['num']}}';">
+                        <td>{{hymn['num']}}</td>
+                        <td>{{hymn['title']}}</td>
+                    </tr>
+                %end
+            </tbody>
+        </table>
+    %end
 </div>

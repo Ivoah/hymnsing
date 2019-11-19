@@ -2,12 +2,12 @@
 
 <a href="/history.png"><img src="/history.png"></a>
 %for day in history:
-    <h3 id="{{day['date'].isoformat()}}">{{day['date'].strftime('%A %B %d, %Y')}}</h3>
+    <h3 id="{{day[0]['date'].isoformat()}}">{{day[0]['date'].strftime('%A %B %d, %Y')}}</h3>
     <table>
-        %for hymn in day['hymns'].strip('|').split('|'):
+        %for hymn in day[1]:
             <tr>
-                <td>{{hymn}}</td>
-                <td><a href="/{{hymn}}">{{hymns[int(hymn) - 1]['title']}}</a></td>
+                <td>{{hymn['num']}}</td>
+                <td><a href="/{{hymn['num']}}">{{hymn['title']}}</a></td>
             </tr>
         %end
     </table>

@@ -1,7 +1,6 @@
 import io
 import csv
 import pymysql
-import operator
 import collections
 
 import matplotlib.pyplot as plt
@@ -10,6 +9,18 @@ from uuid import uuid4
 from bottle import get, default_app, template, static_file, response, request
 
 import auth
+
+def group(l, *ks):
+    ol = []
+    il = []
+    ck = None
+    for e in l:
+        if ck != {k: e[k] for k in ks}:
+            ol.append((ck, il))
+            il = []
+            ck = {k: e[k] for k in ks}
+        il.append({k: v for k, v in e.items() if k not in ks})
+    return ol[1:]
 
 def get_login():
     uuid = request.get_cookie("uuid")
@@ -25,54 +36,48 @@ def root():
     with db.cursor(pymysql.cursors.DictCursor) as cursor:
         cursor.execute('SELECT * FROM hymns LEFT JOIN (SELECT num, COUNT(*) likes FROM likes GROUP BY num) likes USING(num) ORDER BY num ASC')
         hymns = cursor.fetchall()
-    return template('templates/main.tpl', hymns=hymns, uuid=uuid)
+    return template('templates/main.tpl', sections=group(hymns, 'section', 'subsection'))
 
 @get('/history')
 def history():
     uuid = get_login()
     db = pymysql.connect(**auth.auth)
     with db.cursor(pymysql.cursors.DictCursor) as cursor:
-        cursor.execute('SELECT * FROM history ORDER BY date DESC')
+        cursor.execute('SELECT date, num, title, likes FROM history NATURAL JOIN hymns LEFT JOIN (SELECT num, COUNT(*) likes FROM likes GROUP BY num) likes USING(num) ORDER BY date DESC, idx ASC')
         history = cursor.fetchall()
-        cursor.execute('SELECT * FROM hymns LEFT JOIN (SELECT num, COUNT(*) likes FROM likes GROUP BY num) likes USING(num) ORDER BY num ASC')
-        hymns = cursor.fetchall()
     db.close()
-    return template('templates/history.tpl', hymns=hymns, history=history)
+    return template('templates/history.tpl', history=group(history, 'date'))
 
 @get('/history.png')
 def history_png():
     db = pymysql.connect(**auth.auth)
-    with db.cursor(pymysql.cursors.DictCursor) as cursor:
-        cursor.execute('SELECT hymns FROM history')
+    with db.cursor() as cursor:
+        cursor.execute('SELECT title, count(*) FROM history NATURAL JOIN hymns GROUP BY num ORDER BY count(*) DESC')
         rows = cursor.fetchall()
-        cursor.execute('SELECT * FROM hymns LEFT JOIN (SELECT num, COUNT(*) likes FROM likes GROUP BY num) likes USING(num) ORDER BY num ASC')
-        hymns = cursor.fetchall()
     db.close()
 
-    counter = collections.Counter(hymn for hymns in rows for hymn in hymns['hymns'].strip('|').split('|'))
-    xs, ys = zip(*counter.most_common())
-    names = [hymns[int(num) - 1]['title'] for num in xs]
+    xs, ys = zip(*rows)
 
     plt.figure(figsize=(15, 8))
     plt.xticks(rotation='vertical')
     plt.subplots_adjust(0.05, 0.5, 0.95, 0.95)
-    plt.bar(names, ys)
+    plt.bar(xs, ys)
     img = io.BytesIO()
     plt.savefig(img, format='png')
     response.content_type = 'image/png'
     return img.getvalue()
 
-@get('/<hymn:int>')
-def hymn(hymn):
+@get('/<num:int>')
+def hymn(num):
     uuid = get_login()
     db = pymysql.connect(**auth.auth)
     with db.cursor(pymysql.cursors.DictCursor) as cursor:
-        cursor.execute('SELECT date FROM history WHERE hymns LIKE \'%%|%s|%%\' ORDER BY date DESC', hymn)
+        cursor.execute('SELECT date FROM history WHERE num=%s ORDER BY date DESC', num)
         history = cursor.fetchall()
-        cursor.execute('SELECT * FROM hymns LEFT JOIN (SELECT num, COUNT(*) likes FROM likes GROUP BY num) likes USING(num) ORDER BY num ASC')
-        hymns = cursor.fetchall()
+        cursor.execute('SELECT * FROM hymns WHERE num=%s', num)
+        hymn = cursor.fetchone()
     db.close()
-    return template('templates/hymn.tpl', hymn=hymn, hymns=hymns, history=history)
+    return template('templates/hymn.tpl', hymn=hymn, history=history)
 
 application = default_app()
 

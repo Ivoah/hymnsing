@@ -2,7 +2,6 @@
 
 %rebase('templates/base.tpl')
 
-%hymn = hymns[int(hymn) - 1]
 <h2>#{{hymn['num']}}: {{hymn['title']}}</h2>
 
 <a href="https://hymnary.org/search?qu={{quote(hymn['title'])}}">Search Hymnary</a>
