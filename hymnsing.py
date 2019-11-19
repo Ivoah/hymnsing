@@ -26,7 +26,7 @@ def get_login():
     uuid = request.get_cookie("uuid")
     if not uuid:
         uuid = uuid4()
-        response.set_cookie("uuid", str(uuid), max_age=60*60*24*365.25*10) # Set cookie to expire in 10 years
+    response.set_cookie("uuid", str(uuid), max_age=60*60*24*365.25*10) # Set cookie to expire in 10 years
     return uuid
 
 @get('/')
