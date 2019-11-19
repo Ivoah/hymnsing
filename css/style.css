@@ -1,0 +1,46 @@
+body {
+    text-align: center;
+}
+
+/* table,
+th,
+td {
+    border: 1px solid black;
+    font-weight: bold;
+} */
+
+table {
+    box-shadow: 0 5px 18px #ccc;
+}
+
+table {
+    margin: auto;
+}
+
+th,
+td {
+    padding: 15px;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+
+.active-black input[type=Search]:focus:not([readonly]) {
+    border: 0px;
+    box-shadow: 0 6px 16px 1px #ccc;
+}
+
+/* change cursor to pointer for hymns in a table */
+.hymns td {
+    cursor: pointer;
+}
+
+.form-control {
+    color: #dadada;
+}
+
+.hidden {
+    display: none;
+}

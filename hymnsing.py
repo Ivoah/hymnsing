@@ -71,7 +71,11 @@ application = default_app()
 if __name__ == '__main__':
     from bottle import run
 
-    get('/static/<filename>')(lambda filename: static_file(filename, root='static/'))
     get('/audio/<filename>')(lambda filename: static_file(filename, root='audio/'))
+    get('/css/<filename:path>')(lambda filename: static_file(filename, root='css/'))
+    get('/font/<filename:path>')(lambda filename: static_file(filename, root='font/'))
+    get('/img/<filename:path>')(lambda filename: static_file(filename, root='img/'))
+    get('/js/<filename:path>')(lambda filename: static_file(filename, root='js/'))
+    get('/scss/<filename:path>')(lambda filename: static_file(filename, root='scss/'))
 
     run(app=application, host='127.0.0.1', port=8080, debug=True, reloader=True)
