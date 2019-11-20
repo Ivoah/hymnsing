@@ -5,61 +5,9 @@ body {
     font-weight: lighter;
 }
 
-table {
-    box-shadow: 0 5px 18px #ccc;
-    border-collapse: collapse;
-    margin: 50px auto;
-}
-
-table:first-child {
-    margin-top: auto;
-}
-
-th, td {
-    padding: 15px;
-    font-size: .9rem;
-    font-weight: lighter;
-}
-
-thead {
-    color: white;
-    background-color: rgb(239, 83, 80);
-}
-
-tbody tr:hover {
-    background-color: rgba(0, 0, 0, 0.125);
-}
-
 img {
     width: 100%;
     height: auto;
-}
-
-nav {
-    display: flex;
-    justify-content: space-between;
-    background-color: rgb(33, 33, 33);
-}
-
-nav *.spacer {
-    flex-grow: 1;
-}
-
-nav > * {
-    padding: 20px 35px;
-}
-
-nav a {
-    color: white;
-    text-decoration: none;
-}
-
-nav a:hover {
-    background-color: #555;
-}
-
-nav a.title {
-    font-size: 1.25rem;
 }
 
 input[type=search] {
@@ -83,10 +31,6 @@ input[type=search]:focus {
 
 .hidden {
     display: none;
-}
-
-#hymn-tables table {
-    width: 450px;
 }
 
 .heart {

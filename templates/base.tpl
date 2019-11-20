@@ -8,7 +8,11 @@
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
         <link href="https://fonts.googleapis.com/css?family=Roboto:100,400&display=swap" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="css/style.css">
+
+        <link rel="stylesheet" type="text/css" href="css/misc.css">
+        <link rel="stylesheet" type="text/css" href="css/nav.css">
+        <link rel="stylesheet" type="text/css" href="css/table.css">
+        
         <script type="text/javascript" src="js/hymnsing.js"></script>
     </head>
 

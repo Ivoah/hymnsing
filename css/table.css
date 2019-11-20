@@ -1,0 +1,25 @@
+table {
+    box-shadow: 0 5px 18px #ccc;
+    border-collapse: collapse;
+    margin: 50px auto;
+    width: 450px;
+}
+
+table:first-child {
+    margin-top: auto;
+}
+
+th, td {
+    padding: 15px;
+    font-size: .9rem;
+    font-weight: lighter;
+}
+
+thead {
+    color: white;
+    background-color: rgb(239, 83, 80);
+}
+
+tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.125);
+}

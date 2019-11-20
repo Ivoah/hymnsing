@@ -1,0 +1,27 @@
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(33, 33, 33);
+}
+
+nav *.spacer {
+    flex-grow: 1;
+}
+
+nav > * {
+    padding: 20px 35px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+}
+
+nav a:hover {
+    background-color: #555;
+}
+
+nav a.title {
+    font-size: 1.25rem;
+}
