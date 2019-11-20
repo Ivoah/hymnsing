@@ -12,6 +12,7 @@
         <link rel="stylesheet" type="text/css" href="css/misc.css">
         <link rel="stylesheet" type="text/css" href="css/nav.css">
         <link rel="stylesheet" type="text/css" href="css/table.css">
+        <link rel="stylesheet" type="text/css" href="css/heart.css">
         
         <script type="text/javascript" src="js/hymnsing.js"></script>
     </head>
