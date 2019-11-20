@@ -5,6 +5,10 @@ body {
     font-weight: lighter;
 }
 
+#main {
+    margin-top: 64px;
+}
+
 img {
     width: 100%;
     height: auto;

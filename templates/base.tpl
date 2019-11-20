@@ -24,7 +24,9 @@
             <a href="/history">History</a>
             <a href="/admin">Admin</a>
         </nav>
-        <div id="alert"></div>
-        {{!base}}
+        <div id="main">
+            <div id="alert"></div>
+            {{!base}}
+        </div>
     </body>
 </html>
