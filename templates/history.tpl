@@ -7,7 +7,7 @@
     %for day in history:
     <table class="table table-borderless table-hover w-25 my-5">
             <thead id="{{day[0]['date'].isoformat()}}" class="hymns-section-head red lighten-1 white-text">
-                <tr><th colspan="4" align="center">{{day[0]['date'].strftime('%A %B %d, %Y')}}</th></tr>
+                <tr><th colspan="4">{{day[0]['date'].strftime('%A %B %d, %Y')}}</th></tr>
             </thead>
 
         <tbody>

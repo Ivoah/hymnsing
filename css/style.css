@@ -1,25 +1,33 @@
 body {
     text-align: center;
+    margin: 0px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: lighter;
 }
-
-/* table,
-th,
-td {
-    border: 1px solid black;
-    font-weight: bold;
-} */
 
 table {
     box-shadow: 0 5px 18px #ccc;
+    border-collapse: collapse;
+    margin: 50px auto;
 }
 
-table {
-    margin: auto;
+table:first-child {
+    margin-top: auto;
 }
 
-th,
-td {
+th, td {
     padding: 15px;
+    font-size: .9rem;
+    font-weight: lighter;
+}
+
+thead {
+    color: white;
+    background-color: rgb(239, 83, 80);
+}
+
+tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.125);
 }
 
 img {
@@ -27,18 +35,50 @@ img {
     height: auto;
 }
 
-.active-black input[type=Search]:focus:not([readonly]) {
-    border: 0px;
-    box-shadow: 0 6px 16px 1px #ccc;
+nav {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(33, 33, 33);
 }
 
-/* change cursor to pointer for hymns in a table */
-.hymns td.clickable-row {
+nav *.spacer {
+    flex-grow: 1;
+}
+
+nav > * {
+    padding: 20px 35px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+}
+
+nav a:hover {
+    background-color: #555;
+}
+
+nav a.title {
+    font-size: 1.25rem;
+}
+
+input[type=search] {
+    font-size: 1rem;
+    width: 80%;
+    padding: 12px 20px;
+    margin: 25px 0;
+    display: inline-block;
+    border: 2px solid #ccc;
+    border-radius: 7px;
+    box-sizing: border-box;
+}
+
+input[type=search]:focus {
+    border: 2px solid #99f;
+}
+
+.clickable {
     cursor: pointer;
-}
-
-.form-control {
-    color: #dadada;
 }
 
 .hidden {
@@ -49,24 +89,22 @@ img {
     width: 450px;
 }
 
-table .table-hover-darker:hover {
-    background-color: rgba(0, 0, 0, 0.125);
-}
-
 .heart {
-    cursor: pointer;
     height: 25px;
     width: 50px;
-    background-image:url("https://abs.twimg.com/a/1446542199/img/t1/web_heart_animation.png");
+    background-image: url("https://abs.twimg.com/a/1446542199/img/t1/web_heart_animation.png");
     background-position: left;
-    background-repeat:no-repeat;
-    background-size:2900%;
+    background-repeat: no-repeat;
+    background-size: 2900%;
+}
+
+.heart:hover {
+    background-color: rgba(0, 0, 0, 0.125);
 }
 
 .heart.liked {
     background-position:right;
 }
-
 
 @-webkit-keyframes heart-burst {
     from { background-position:left; }
@@ -89,4 +127,4 @@ table .table-hover-darker:hover {
 
 .is_animating {
     animation: heart-burst .8s steps(28) 1;
-  }
+}
