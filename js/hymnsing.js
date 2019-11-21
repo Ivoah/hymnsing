@@ -22,21 +22,10 @@ $(document).ready(function () {
       label.text(likes + " like" + (likes != 1 ? "s" : ""));
     }
 
-    function fail() {
-      $("#alert").html(`
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <strong>Error</strong> couldn't update like.
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-      `);
-    }
-
     if (!(heart.hasClass("liked"))) {
-      $.post("/like/" + num, () => {heart.toggleClass("is_animating"); addLikes(1)}).fail(fail);
+      $.post("/like/" + num, () => {heart.toggleClass("is_animating"); addLikes(1)}).fail(() => alert("Could not update like"));
     } else {
-      $.post("/unlike/" + num, () => addLikes(-1)).fail(fail);
+      $.post("/unlike/" + num, () => addLikes(-1)).fail(() => alert("Could not update like"));
     }
   });
 

@@ -25,7 +25,6 @@
             <a href="/admin">Admin</a>
         </nav>
         <div id="main">
-            <div id="alert"></div>
             {{!base}}
         </div>
     </body>
