@@ -23,14 +23,18 @@ def group(l, *ks):
     return ol[1:]
 
 def get_login():
-    uuid = request.get_cookie("uuid")
+    uuid = request.get_cookie('uuid')
     if not uuid:
         uuid = str(uuid4())
-    response.set_cookie("uuid", uuid, path='/', max_age=60*60*24*365.25*10) # Set cookie to expire in ~10 years
+    response.set_cookie('uuid', uuid, path='/', max_age=60*60*24*365.25*10) # Set cookie to expire in ~10 years
 
     db = pymysql.connect(autocommit=True, **auth.auth)
     with db.cursor() as cursor:
-        cursor.execute('INSERT INTO visitors (uuid, last_visit) VALUES (%s, now()) ON DUPLICATE KEY UPDATE last_visit=now()', uuid)
+        agent = request.headers.get('User-Agent')
+        cursor.execute(
+            'INSERT INTO visitors (uuid, last_visit, user_agent) VALUES (%s, now(), %s) ON DUPLICATE KEY UPDATE last_visit=now(), user_agent=%s',
+            (uuid, agent, agent)
+        )
     db.close()
 
     return uuid
