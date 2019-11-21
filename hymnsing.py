@@ -94,7 +94,10 @@ def like(num):
     uuid = get_login()
     db = pymysql.connect(autocommit=True, **auth.auth)
     with db.cursor() as cursor:
-        cursor.execute('INSERT IGNORE INTO likes VALUES (%s, %s)', (uuid, num))
+        try:
+            cursor.execute('INSERT INTO likes VALUES (%s, %s)', (uuid, num))
+        except pymysql.err.IntegrityError:
+            response.status = 409
     db.close()
 
 @post('/unlike/<num:int>')
