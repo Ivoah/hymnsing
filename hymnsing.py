@@ -109,7 +109,8 @@ def unlike(num):
     uuid = get_login()
     db = pymysql.connect(autocommit=True, **auth.auth)
     with db.cursor() as cursor:
-        cursor.execute('DELETE FROM likes WHERE uuid=%s AND num=%s', (uuid, num))
+        rows = cursor.execute('DELETE FROM likes WHERE uuid=%s AND num=%s', (uuid, num))
+        if rows == 0: response.status = 409
     db.close()
 
 application = default_app()
