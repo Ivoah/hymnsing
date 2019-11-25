@@ -14,19 +14,31 @@ img {
     height: auto;
 }
 
-input[type=search] {
-    font-size: 1rem;
-    width: 80%;
-    padding: 12px 20px;
-    margin: 25px 0;
-    display: inline-block;
-    border: 2px solid #ccc;
-    border-radius: 7px;
-    box-sizing: border-box;
+.search-container {
+    padding: 50px 0;
 }
 
+input[type=search] {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+
 input[type=search]:focus {
-    border: 2px solid #99f;
+    outline: none;
+    border: 0px;
+    box-shadow: 0 6px 16px 1px #ccc;
 }
 
 .clickable {
@@ -35,4 +47,35 @@ input[type=search]:focus {
 
 .hidden {
     display: none;
+}
+
+.container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto
+}
+
+@media (min-width: 576px) {
+    .container {
+        max-width: 540px
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 720px
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 960px
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px
+    }
 }

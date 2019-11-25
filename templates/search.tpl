@@ -1,1 +1,1 @@
-<input type="search" placeholder="Search">
+<div class="container search-container"><input type="search" placeholder="Search"></div>
