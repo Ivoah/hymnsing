@@ -81,6 +81,11 @@ def history_png():
     response.content_type = 'image/png'
     return img.getvalue()
 
+@get('/admin')
+def admin():
+    uuid = get_login()
+    return template('templates/admin.tpl')
+
 @get('/<num:int>')
 def hymn(num):
     uuid = get_login()

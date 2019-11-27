@@ -79,3 +79,10 @@ input[type=search]:focus {
         max-width: 1140px
     }
 }
+
+.centered {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
