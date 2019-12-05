@@ -1,3 +1,14 @@
+function adminLogin() {
+  var pw = $("#input").val();
+  $.post("/login", {
+    "password": pw
+  }).done(function() {
+    window.location.href = "/admin";
+  }).fail(function() {
+    alert("Invalid login");
+  });
+}
+
 $(document).ready(function () {
   $("input[type=search]").on("keyup", function() {
     var query = $(this).val().toLowerCase();

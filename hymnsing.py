@@ -22,7 +22,7 @@ def group(l, *ks):
         il.append({k: v for k, v in e.items() if k not in ks})
     return ol[1:]
 
-def get_login():
+def get_uuid():
     uuid = request.get_cookie('uuid')
     if not uuid:
         uuid = str(uuid4())
@@ -41,7 +41,7 @@ def get_login():
 
 @get('/')
 def root():
-    uuid = get_login()
+    uuid = get_uuid()
     db = pymysql.connect(**auth.auth)
     with db.cursor(pymysql.cursors.DictCursor) as cursor:
         cursor.execute('SELECT * FROM hymns LEFT JOIN (SELECT num, COUNT(*) likes FROM likes GROUP BY num) likes USING(num) ORDER BY num ASC')
@@ -52,7 +52,7 @@ def root():
 
 @get('/history')
 def history():
-    uuid = get_login()
+    uuid = get_uuid()
     db = pymysql.connect(**auth.auth)
     with db.cursor(pymysql.cursors.DictCursor) as cursor:
         cursor.execute('SELECT date, num, title, likes FROM history NATURAL JOIN hymns LEFT JOIN (SELECT num, COUNT(*) likes FROM likes GROUP BY num) likes USING(num) ORDER BY date DESC, idx ASC')
@@ -81,14 +81,32 @@ def history_png():
     response.content_type = 'image/png'
     return img.getvalue()
 
+@get('/login')
+def get_login():
+    uuid = get_uuid()
+    if request.get_cookie('logged_in'):
+        redirect('/admin')
+    return template('templates/login.tpl')
+
+@post('/login')
+def post_login():
+    uuid = get_uuid()
+    if request.forms.get('password') == auth.auth['password']:
+        response.set_cookie('logged_in', 'true', path='/')
+    else:
+        response.status = 401
+
 @get('/admin')
 def admin():
-    uuid = get_login()
+    uuid = get_uuid()
+    if not request.get_cookie('logged_in'):
+        redirect('/login')
+
     return template('templates/admin.tpl')
 
 @get('/<num:int>')
 def hymn(num):
-    uuid = get_login()
+    uuid = get_uuid()
     db = pymysql.connect(**auth.auth)
     with db.cursor(pymysql.cursors.DictCursor) as cursor:
         cursor.execute('SELECT date FROM history WHERE num=%s ORDER BY date DESC', num)
@@ -100,7 +118,7 @@ def hymn(num):
 
 @post('/like/<num:int>')
 def like(num):
-    uuid = get_login()
+    uuid = get_uuid()
     db = pymysql.connect(autocommit=True, **auth.auth)
     with db.cursor() as cursor:
         try:
@@ -111,7 +129,7 @@ def like(num):
 
 @post('/unlike/<num:int>')
 def unlike(num):
-    uuid = get_login()
+    uuid = get_uuid()
     db = pymysql.connect(autocommit=True, **auth.auth)
     with db.cursor() as cursor:
         rows = cursor.execute('DELETE FROM likes WHERE uuid=%s AND num=%s', (uuid, num))
