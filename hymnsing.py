@@ -1,5 +1,6 @@
 import io
 import csv
+import time
 import pymysql
 import collections
 
@@ -9,6 +10,8 @@ from uuid import uuid4
 from bottle import *
 
 import auth
+
+LOGIN_TIME = 60*15 # Keep admins logged in for 15 minutes
 
 def group(l, *ks):
     ol = []
@@ -22,6 +25,7 @@ def group(l, *ks):
         il.append({k: v for k, v in e.items() if k not in ks})
     return ol[1:]
 
+logins = {}
 def get_uuid():
     uuid = request.get_cookie('uuid')
     if not uuid:
@@ -37,22 +41,22 @@ def get_uuid():
         )
     db.close()
 
-    return uuid
+    return uuid, uuid in logins and time.time() < logins[uuid]
 
 @get('/')
 def root():
-    uuid = get_uuid()
+    uuid, is_admin = get_uuid()
     db = pymysql.connect(**auth.auth)
     with db.cursor(pymysql.cursors.DictCursor) as cursor:
         cursor.execute('SELECT * FROM hymns LEFT JOIN (SELECT num, COUNT(*) likes FROM likes GROUP BY num) likes USING(num) ORDER BY num ASC')
         hymns = cursor.fetchall()
         cursor.execute('SELECT num FROM likes WHERE uuid=%s', uuid)
         likes = [like['num'] for like in cursor.fetchall()]
-    return template('templates/main.tpl', sections=group(hymns, 'section', 'subsection'), likes=likes)
+    return template('templates/main.tpl', sections=group(hymns, 'section', 'subsection'), likes=likes, is_admin=is_admin)
 
 @get('/history')
 def history():
-    uuid = get_uuid()
+    uuid, is_admin = get_uuid()
     db = pymysql.connect(**auth.auth)
     with db.cursor(pymysql.cursors.DictCursor) as cursor:
         cursor.execute('SELECT date, num, title, likes FROM history NATURAL JOIN hymns LEFT JOIN (SELECT num, COUNT(*) likes FROM likes GROUP BY num) likes USING(num) ORDER BY date DESC, idx ASC')
@@ -60,7 +64,7 @@ def history():
         cursor.execute('SELECT num FROM likes WHERE uuid=%s', uuid)
         likes = [like['num'] for like in cursor.fetchall()]
     db.close()
-    return template('templates/history.tpl', history=group(history, 'date'), likes=likes)
+    return template('templates/history.tpl', history=group(history, 'date'), likes=likes, is_admin=is_admin)
 
 @get('/history.png')
 def history_png():
@@ -83,30 +87,23 @@ def history_png():
 
 @get('/login')
 def get_login():
-    uuid = get_uuid()
-    if request.get_cookie('logged_in'):
-        redirect('/admin')
-    return template('templates/login.tpl')
+    uuid, is_admin = get_uuid()
+    if is_admin:
+        del logins[uuid]
+        redirect('/')
+    return template('templates/login.tpl', is_admin=is_admin)
 
 @post('/login')
 def post_login():
-    uuid = get_uuid()
+    uuid, is_admin = get_uuid()
     if request.forms.get('password') == auth.auth['password']:
-        response.set_cookie('logged_in', 'true', path='/')
+        logins[uuid] = time.time() + LOGIN_TIME
     else:
         response.status = 401
 
-@get('/admin')
-def admin():
-    uuid = get_uuid()
-    if not request.get_cookie('logged_in'):
-        redirect('/login')
-
-    return template('templates/admin.tpl')
-
 @get('/<num:int>')
 def hymn(num):
-    uuid = get_uuid()
+    uuid, is_admin = get_uuid()
     db = pymysql.connect(**auth.auth)
     with db.cursor(pymysql.cursors.DictCursor) as cursor:
         cursor.execute('SELECT date FROM history WHERE num=%s ORDER BY date DESC', num)
@@ -114,11 +111,11 @@ def hymn(num):
         cursor.execute('SELECT * FROM hymns WHERE num=%s', num)
         hymn = cursor.fetchone()
     db.close()
-    return template('templates/hymn.tpl', hymn=hymn, history=history)
+    return template('templates/hymn.tpl', hymn=hymn, history=history, is_admin=is_admin)
 
 @post('/like/<num:int>')
 def like(num):
-    uuid = get_uuid()
+    uuid, is_admin = get_uuid()
     db = pymysql.connect(autocommit=True, **auth.auth)
     with db.cursor() as cursor:
         try:
@@ -129,7 +126,7 @@ def like(num):
 
 @post('/unlike/<num:int>')
 def unlike(num):
-    uuid = get_uuid()
+    uuid, is_admin = get_uuid()
     db = pymysql.connect(autocommit=True, **auth.auth)
     with db.cursor() as cursor:
         rows = cursor.execute('DELETE FROM likes WHERE uuid=%s AND num=%s', (uuid, num))

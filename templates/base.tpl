@@ -23,7 +23,11 @@
             <a href="/" class="title">Trinity Hymnal</a>
             <div class="spacer"></div>
             <a href="/history">History</a>
-            <a href="/admin">Admin</a>
+            %if is_admin:
+                <a href="/login" style="background-color: rgb(239, 83, 80)">Logout</a>
+            %else:
+                <a href="/login">Admin</a>
+            %end
         </nav>
         <div id="main">
             {{!base}}

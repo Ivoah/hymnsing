@@ -3,7 +3,7 @@ function adminLogin() {
   $.post("/login", {
     "password": pw
   }).done(function() {
-    window.location.href = "/admin";
+    window.location.href = "/";
   }).fail(function() {
     alert("Invalid login");
   });
