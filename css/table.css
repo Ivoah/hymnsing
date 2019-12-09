@@ -2,7 +2,7 @@ table {
     box-shadow: 0 5px 18px #ccc;
     border-collapse: collapse;
     margin: 50px auto;
-    width: 450px;
+    max-width: 450px;
 }
 
 table:first-child {
