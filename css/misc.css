@@ -43,6 +43,34 @@ input[type=search]:focus {
     box-shadow: 0 6px 16px 1px #ccc;
 }
 
+button {
+    background-color: rgb(239, 83, 80);
+    box-shadow: 0 5px 12px rgb(255, 151, 149);
+    color: #4a4141;
+    text-align: center;
+    text-decoration: none;
+    padding: 5px 6px;
+    border: none;
+    border-radius: 20px;
+    max-width: 300px;
+    -webkit-transition: all 200ms;
+    -ms-transition: all 200ms;
+    transition: all 200ms;
+}
+
+button:hover {
+    background-color: rgb(240, 115, 113);
+}
+
+button:active {
+    box-shadow: 0 1px 12px rgb(255, 151, 149);
+    transform: scale(0.98);
+}
+
+button:focus {
+    outline: 0;
+}
+
 .clickable {
     cursor: pointer;
 }
@@ -63,4 +91,29 @@ input[type=search]:focus {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-  }
+}
+
+.mb-25 {
+    margin-bottom: 25px;
+}
+
+div a {
+    color: rgb(239, 83, 80);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.hymn-title {
+    padding-top: 30px;
+    font-size: 50px;
+    font-weight: normal;
+}
+
+#datepicker {
+    border: 0;
+    border-bottom: 2px solid rgb(239, 83, 80);
+    text-align: center;
+    175px
+    height: 30px;
+    outline: none;
+}

@@ -1,7 +1,7 @@
 table {
     box-shadow: 0 5px 18px #ccc;
     border-collapse: collapse;
-    margin: 50px auto;
+    margin: 0 auto 50px auto;
     max-width: 450px;
 }
 

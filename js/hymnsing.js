@@ -11,23 +11,31 @@ function adminLogin() {
 
 function addHymn(num) {
   var date = $("#datepicker").val();
-  $.post("/addHymn", {
-    date: date,
-    hymn: num
-  }).done(function() {
-    // if ($("table").children().size() == 0) {
-    //   $("table").html(`
-    //     <tr>
-    //       <td><a href="/history#${date.toISOString()}">${date}</a></td>
-    //     </tr>
-    //   `);
-    // } else {
-    //   var top = $("table");
-    // }
-    location.reload();
-  }).fail(function() {
-    alert("Could not add hymn");
-  });
+  if (Date.parse(date)) {
+    if (Date.parse(date) < new Date()) {
+      $.post("/addHymn", {
+        date: date,
+        hymn: num
+      }).done(function() {
+        // if ($("table").children().size() == 0) {
+        //   $("table").html(`
+        //     <tr>
+        //       <td><a href="/history#${date.toISOString()}">${date}</a></td>
+        //     </tr>
+        //   `);
+        // } else {
+        //   var top = $("table");
+        // }
+        location.reload();
+      }).fail(function() {
+        alert("Could not add hymn");
+      }); 
+    } else {
+      alert("Please enter a date that is not in the future")
+    }
+  } else {
+    alert("Invalid date")
+  }
 }
 
 $(document).ready(function () {

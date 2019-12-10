@@ -1,11 +1,11 @@
 %rebase('templates/base.tpl')
 
-%include('templates/search.tpl')
-
-<svg width="600" height="500"></svg>
+<svg style="margin-top: 25px;" width="600" height="600"></svg>
 <link rel="stylesheet" href="css/d3.css">
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="js/history.js"></script>
+
+%include('templates/search.tpl')
 
 <div id="hymn-tables">
     %for day in history:
