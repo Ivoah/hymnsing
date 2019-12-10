@@ -82,7 +82,7 @@ $(document).ready(function () {
     $(this).toggleClass("is_animating");
   });
 
-  // CREDIT: https://stackoverflow.com/questions/17534661/make-anchor-link-go-some-pixels-above-where-its-linked-to
+  // CREDIT: https://stackoverflow.com/questions/17534661
   // Captures click events of all <a> elements with href starting with #
   $(document).on('click', 'a[href^="#"]', function (event) {
     // Click events are captured before hashchanges. Timeout
