@@ -9,6 +9,9 @@
 <audio controls src="https://hymnsing.ivoah.net/audio/Th2_{{'{:0>3}'.format(hymn['num'])}}.mp3">Your browser does not support audio playback</audio>
 
 <h3>History</h3>
+%if is_admin:
+    <input type="text" id="datepicker"> <button onclick="addHymn({{hymn['num']}})">Add to history</button>
+%end
 
 <table class="table">
     %for day in history:

@@ -9,7 +9,31 @@ function adminLogin() {
   });
 }
 
+function addHymn(num) {
+  var date = $("#datepicker").val();
+  $.post("/addHymn", {
+    date: date,
+    hymn: num
+  }).done(function() {
+    // if ($("table").children().size() == 0) {
+    //   $("table").html(`
+    //     <tr>
+    //       <td><a href="/history#${date.toISOString()}">${date}</a></td>
+    //     </tr>
+    //   `);
+    // } else {
+    //   var top = $("table");
+    // }
+    location.reload();
+  }).fail(function() {
+    alert("Could not add hymn");
+  });
+}
+
 $(document).ready(function () {
+  $("#datepicker").datepicker();
+  $("#datepicker").datepicker("option", "dateFormat", "yy-mm-dd");
+
   $("input[type=search]").on("keyup", function() {
     var query = $(this).val().toLowerCase();
     $("#hymn-tables tbody>tr").each(function() {

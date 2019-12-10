@@ -2,12 +2,13 @@ import io
 import csv
 import time
 import pymysql
+import datetime
 import collections
 
 import matplotlib.pyplot as plt
 
 from uuid import uuid4
-from bottle import *
+from bottle import get, post, request, response, template, redirect, static_file, default_app
 
 import auth
 
@@ -124,6 +125,25 @@ def unlike(num):
         rows = cursor.execute('DELETE FROM likes WHERE uuid=%s AND num=%s', (uuid, num))
         if rows == 0: response.status = 409
     db.close()
+
+@post('/addHymn')
+def addHymn():
+    uuid, is_admin = get_uuid()
+    if not is_admin:
+        response.status = 401
+        return '<html><body><h1>401 Unauthorized</h1></body></html>'
+    try:
+        print(request.forms.get('date'))
+        date = datetime.date(*map(int, request.forms.get('date').split('-')))
+    except (ValueError, TypeError):
+        response.status = 400
+        return '<html><body><h1>400 Bad Request</h1></body></html>'
+    hymn = request.forms.get('hymn')
+    db = pymysql.connect(autocommit=True, **auth.auth)
+    with db.cursor() as cursor:
+        cursor.execute('SELECT count(*) FROM history WHERE date=%s', date)
+        next_idx = cursor.fetchone()[0]
+        cursor.execute('INSERT INTO history (date, idx, num) VALUES (%s, %s, %s)', (date, next_idx, hymn))
 
 application = default_app()
 
