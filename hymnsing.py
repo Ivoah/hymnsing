@@ -5,8 +5,6 @@ import pymysql
 import datetime
 import collections
 
-import matplotlib.pyplot as plt
-
 from uuid import uuid4
 from bottle import get, post, request, response, template, redirect, static_file, default_app
 
@@ -76,7 +74,7 @@ def history_csv():
     db.close()
 
     response.content_type = 'text/csv'
-    return 'hymn,count\n' + '\n'.join(','.join(f'"{c}"' for c in row) for row in rows)
+    return 'hymn,count\n' + '\n'.join(','.join('"{}"'.format(c) for c in row) for row in rows)
 
 @get('/login')
 def get_login():
