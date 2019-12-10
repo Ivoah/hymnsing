@@ -14,3 +14,5 @@ auth = {
 Replace the appropriate fields with actual values
 
 DATABASE_PASSWORD will be the password used to login as an admin on the site
+
+Run in debug mode with `python hymnsing.py`
