@@ -62,24 +62,16 @@ def history():
     db.close()
     return template('templates/history.tpl', history=group(history, 'date'), likes=likes)
 
-@get('/history.png')
-def history_png():
+@get('/history.csv')
+def history_csv():
     db = pymysql.connect(**auth.auth)
     with db.cursor() as cursor:
-        cursor.execute('SELECT title, count(*) FROM history NATURAL JOIN hymns GROUP BY num ORDER BY count(*) DESC')
+        cursor.execute('SELECT title, count(*) FROM history NATURAL JOIN hymns GROUP BY num HAVING count(*) >= 5 ORDER BY count(*) DESC')
         rows = cursor.fetchall()
     db.close()
 
-    xs, ys = zip(*rows)
-
-    plt.figure(figsize=(15, 8))
-    plt.xticks(rotation='vertical')
-    plt.subplots_adjust(0.05, 0.5, 0.95, 0.95)
-    plt.bar(xs, ys)
-    img = io.BytesIO()
-    plt.savefig(img, format='png')
-    response.content_type = 'image/png'
-    return img.getvalue()
+    response.content_type = 'text/csv'
+    return 'hymn,count\n' + '\n'.join(','.join(f'"{c}"' for c in row) for row in rows)
 
 @get('/admin')
 def admin():
