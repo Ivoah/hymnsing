@@ -28,7 +28,7 @@
             %if is_admin:
                 <a href="/login" style="background-color: rgb(239, 83, 80)">Logout</a>
             %else:
-                <a href="/login">Admin</a>
+                <a href="/login" onclick="sessionStorage.setItem('prev', location.href)">Admin</a>
             %end
         </nav>
         <div id="main">

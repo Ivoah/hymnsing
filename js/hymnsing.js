@@ -3,7 +3,8 @@ function adminLogin() {
   $.post("/login", {
     "password": pw
   }).done(function () {
-    window.location.href = "/";
+    if ("prev" in sessionStorage) location.href = sessionStorage.getItem("prev");
+    else location.href = "/";
   }).fail(function () {
     alert("Invalid login");
   });

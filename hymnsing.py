@@ -81,7 +81,7 @@ def get_login():
     uuid, is_admin = get_uuid()
     if is_admin:
         del logins[uuid]
-        redirect('/')
+        redirect(request.headers.get('Referer'))
     return template('templates/login.tpl', is_admin=is_admin)
 
 @post('/login')
