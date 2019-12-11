@@ -18,15 +18,6 @@ function addHymn(num) {
         date: date,
         hymn: num
       }).done(function () {
-        // if ($("table").children().size() == 0) {
-        //   $("table").html(`
-        //     <tr>
-        //       <td><a href="/history#${date.toISOString()}">${date}</a></td>
-        //     </tr>
-        //   `);
-        // } else {
-        //   var top = $("table");
-        // }
         location.reload();
       }).fail(function () {
         alert("Could not add hymn");
