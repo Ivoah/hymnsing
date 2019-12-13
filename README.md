@@ -1,6 +1,6 @@
 # hymnsing
 
-Requirements: `bottle`, `pymysql`, `>=python 3.6`
+Requirements: `bottle`, `pymysql`, `Python 3`
 
 Create `auth.py` with following contents:
 ```python
