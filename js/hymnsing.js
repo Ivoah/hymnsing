@@ -64,9 +64,9 @@ $(document).ready(function () {
     }
 
     if (!($(this).hasClass("liked"))) {
-      $.post("/like/" + num, () => { $(this).toggleClass("is_animating"); addLikes(1) }).fail(() => alert("Could not update like"));
+      $.post("/like/" + num, () => { $(this).toggleClass("is_animating"); addLikes(1) }).fail(() => alert("Could not update like\n(try refreshing the page)"));
     } else {
-      $.post("/unlike/" + num, () => addLikes(-1)).fail(() => alert("Could not update like"));
+      $.post("/unlike/" + num, () => addLikes(-1)).fail(() => alert("Could not update like\n(try refreshing the page)"));
     }
   });
 
