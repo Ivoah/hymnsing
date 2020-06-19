@@ -18,7 +18,7 @@
             %for hymn in day[1]:
                 %include('templates/innertable.tpl')
             %end
-            </tbody>
+        </tbody>
     </table>
     %end
 </div>
