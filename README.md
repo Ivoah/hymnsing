@@ -17,4 +17,4 @@ DATABASE_PASSWORD will be the password used to login as an admin on the site
 
 Run in debug mode with `python hymnsing.py`
 
-A live version of the website can be found at https://hymnsing.anarchistsite.com
+A live version of the website can be found at https://hymnsing.ivoah.net
