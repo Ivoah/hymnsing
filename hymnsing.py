@@ -25,9 +25,11 @@ def group(l, *ks):
     return ol[1:]
 
 logins = {}
-def get_uuid():
+def get_uuid(create=True):
     uuid = request.get_cookie('uuid')
     if not uuid:
+        if not create:
+            return None, False
         uuid = str(uuid4())
     response.set_cookie('uuid', uuid, path='/', max_age=60*60*24*365.25*10) # Set cookie to expire in ~10 years
 
@@ -117,7 +119,10 @@ def like(num):
 
 @post('/unlike/<num:int>')
 def unlike(num):
-    uuid, is_admin = get_uuid()
+    uuid, is_admin = get_uuid(create=False)
+    if uuid is None:
+        response.status = 403
+        return
     db = pymysql.connect(autocommit=True, **auth.auth)
     with db.cursor() as cursor:
         rows = cursor.execute('DELETE FROM likes WHERE uuid=%s AND num=%s', (uuid, num))
